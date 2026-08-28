@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/games/chess/(.*)",
-      "destination": "/$1"
+      "destination": "/index.html"
     },
     {
       "source": "/games/chess",
