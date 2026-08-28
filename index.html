@@ -249,9 +249,9 @@
                 return;
             }
 
-            // Connect to the ngrok tunnel for the WebSocket
-            const NGROK_DOMAIN = "acquirable-nonacquiescent-sage.ngrok-free.dev";
-            const wsUrl = `wss://${NGROK_DOMAIN}/games/chess/ws/showdown`;
+            // Connect to the Cloudflare tunnel for the WebSocket
+            const API_DOMAIN = "ws.goblinlife.org";
+            const wsUrl = `wss://${API_DOMAIN}/games/chess/ws/showdown`;
             
             ws = new WebSocket(wsUrl);
 
@@ -346,8 +346,8 @@
         async function initDiscord() {
             try {
                 connStatus.innerText = "Fetching config...";
-                const NGROK_DOMAIN = "acquirable-nonacquiescent-sage.ngrok-free.dev";
-                const res = await fetch(`https://${NGROK_DOMAIN}/games/chess/config`);
+                const API_DOMAIN = "ws.goblinlife.org";
+                const res = await fetch(`https://${API_DOMAIN}/games/chess/config`);
                 const configData = await res.json();
                 
                 if (!configData.client_id) {
