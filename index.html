@@ -249,9 +249,16 @@
                 return;
             }
 
-            // Connect to the Cloudflare tunnel for the WebSocket
-            const API_DOMAIN = "ws.goblinlife.org";
-            const wsUrl = `wss://${API_DOMAIN}/games/chess/ws/showdown`;
+            // Connect to the Cloudflare tunnel via Discord Proxy if in iframe
+            const urlParams = new URLSearchParams(window.location.search);
+            const isDiscord = urlParams.has('frame_id');
+            const CLIENT_ID = "1416651287163965471";
+            
+            let WS_BASE = "wss://ws.goblinlife.org";
+            if (isDiscord) {
+                WS_BASE = `wss://${CLIENT_ID}.discordsays.com/ws`;
+            }
+            const wsUrl = `${WS_BASE}/games/chess/ws/showdown`;
             
             ws = new WebSocket(wsUrl);
 
@@ -346,16 +353,23 @@
         async function initDiscord() {
             try {
                 connStatus.innerText = "Fetching config...";
-                const API_DOMAIN = "ws.goblinlife.org";
-                const res = await fetch(`https://${API_DOMAIN}/games/chess/config`);
+                const urlParams = new URLSearchParams(window.location.search);
+                const isDiscord = urlParams.has('frame_id');
+                const CLIENT_ID = "1416651287163965471";
+                
+                let API_BASE = "https://ws.goblinlife.org";
+                if (isDiscord) {
+                    API_BASE = `https://${CLIENT_ID}.discordsays.com/ws`;
+                }
+                
+                const res = await fetch(`${API_BASE}/games/chess/config`);
                 const configData = await res.json();
                 
                 if (!configData.client_id) {
                     throw new Error("No client ID returned");
                 }
                 
-                const urlParams = new URLSearchParams(window.location.search);
-                if (!urlParams.has('frame_id')) {
+                if (!isDiscord) {
                     console.log("No frame_id found. Running in browser testing mode.");
                     connStatus.innerText = "Browser Mode";
                     gameId = urlParams.get('game_id') || "test_game_123";
