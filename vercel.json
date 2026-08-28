@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/games/chess/(.*)",
+      "destination": "/$1"
+    },
+    {
+      "source": "/games/chess",
+      "destination": "/index.html"
+    }
+  ]
+}
